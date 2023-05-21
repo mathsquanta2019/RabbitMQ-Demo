@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.safemtech.ampqdemo.constants.AppConstants.PROCESSED;
+import static com.safemtech.ampqdemo.constants.AppConstants.STATUS;
+
 @Component
 @Slf4j
 public class MessageListener {
@@ -23,7 +26,7 @@ public class MessageListener {
     @RabbitListener(queues = AppConstants.QUEUE_NAME)
     public void consume(Orders orders){
         Map<String, Object> fieldsToUpdateOnConsumption = new HashMap<>();
-        fieldsToUpdateOnConsumption.put("status", "PROCESSED");
+        fieldsToUpdateOnConsumption.put(STATUS, PROCESSED);
         orderService.updateOrders(orders.getId(), fieldsToUpdateOnConsumption);
         log.info("SUCCESSFULLY PROCESSED ORDER {}!", orders.getId());
     }

@@ -3,6 +3,7 @@ package com.safemtech.ampqdemo.service;
 import com.safemtech.ampqdemo.entity.Address;
 import com.safemtech.ampqdemo.entity.Orders;
 import com.safemtech.ampqdemo.entity.Product;
+import com.safemtech.ampqdemo.producer.AMQPProducer;
 import com.safemtech.ampqdemo.repository.AddressRepository;
 import com.safemtech.ampqdemo.repository.OrderRepository;
 import com.safemtech.ampqdemo.repository.ProductRepository;
@@ -20,13 +21,14 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final AddressRepository addressRepository;
-
     private final ProductRepository productRepository;
+    private final AMQPProducer amqpProducer;
 
-    public OrderService(OrderRepository orderRepository, AddressRepository addressRepository, ProductRepository productRepository) {
+    public OrderService(OrderRepository orderRepository, AddressRepository addressRepository, ProductRepository productRepository, AMQPProducer amqpProducer) {
         this.orderRepository = orderRepository;
         this.addressRepository = addressRepository;
         this.productRepository = productRepository;
+        this.amqpProducer = amqpProducer;
     }
 
 
@@ -56,7 +58,8 @@ public class OrderService {
 
         List<Product> products = orders.getProducts();
         productRepository.saveAll(products);
-
-        return orderRepository.save(orders);
+        Orders order = orderRepository.save(orders);
+        amqpProducer.exchange(order);
+        return order;
     }
 }
