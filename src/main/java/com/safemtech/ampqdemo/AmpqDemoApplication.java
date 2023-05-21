@@ -1,6 +1,5 @@
 package com.safemtech.ampqdemo;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.safemtech.ampqdemo.entity.Address;
 import com.safemtech.ampqdemo.entity.Orders;
 import com.safemtech.ampqdemo.entity.Product;
@@ -37,8 +36,6 @@ public class AmpqDemoApplication {
             productRepository.saveAll(products);
             Orders order = new Orders(LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), "INITIATED",
                     products, address);
-
-            log.info(new ObjectMapper().writeValueAsString(order)) ;
 
             orderRepository.save(order);
         };

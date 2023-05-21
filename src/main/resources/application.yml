@@ -1,14 +1,15 @@
 spring:
-  h2:
-    console:
-      enabled: true
   datasource:
-    generate-unique-name: false
-    name: orderDb
-    username: sa
-    driverClassName: org.h2.Driver
+    driver-class-name: org.postgresql.Driver
+    url: ${ENV_DB_URL}
+    username: ${ENV_DB_USERNAME}
+    password: ${ENV_DB_PASSWORD}
   jpa:
-    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+    spring.jpa.database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
 management:
   tracing:
     sampling:
